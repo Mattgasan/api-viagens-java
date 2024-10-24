@@ -1,11 +1,10 @@
 package com.api_viagens.repository;
 
-import java.time.LocalDate;
+import org.springframework.data.repository.ListCrudRepository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.api_viagens.model.Customer;
 
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    Customer findByName(String name);
-    Customer findByBirthDate(LocalDate birthDate);
-    <S> com.api_viagens.model.Customer saveAll(Iterable<S> customer);
+public interface CustomerRepository extends ListCrudRepository<Customer, Long> {
+    
 }
+

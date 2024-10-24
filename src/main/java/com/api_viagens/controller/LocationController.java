@@ -1,42 +1,46 @@
 package com.api_viagens.controller;
 
-import org.springframework.web.bind.annotation.*;
-
 import com.api_viagens.model.Location;
-import com.api_viagens.repository.LocationRepository;
+import com.api_viagens.service.LocationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/locations")
 public class LocationController {
+    @Autowired
+    private LocationService locationService;
 
-    private final LocationRepository locationRepository;
-
-    public LocationController(LocationRepository locationRepository) {
-        this.locationRepository = locationRepository;
-    }
-
-    @GetMapping("/{id}")
-    public javax.tools.DocumentationTool.Location getLocationById(@PathVariable Long id) {
-        return locationRepository.findById(id).orElseThrow();
+    @GetMapping
+    public List<Location> getAllLocations() {
+        return locationService.findAll();
     }
 
     @PostMapping
-    public <S> Location createLocation(@RequestBody Location location) {
-        return locationRepository.save((Iterable<S>) location);
+    public Location createLocation(@RequestBody Location location) {
+        return locationService.save(location);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Location> getLocationById(@PathVariable Long id) {
+        return locationService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public javax.tools.DocumentationTool.Location updateLocation(@PathVariable Long id, @RequestBody Location location) {
-        javax.tools.DocumentationTool.Location existing = locationRepository.findById(id).orElseThrow();
-        existing.setName(location.getName());
-        // Atualize os outros campos...
-        return locationRepository.save(existing);
+    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Location location) {
+        return locationService.update(id, location)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLocation(@PathVariable Long id) {
-        locationRepository.deleteById(id);
+    public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
+        locationService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

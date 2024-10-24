@@ -1,25 +1,17 @@
 package com.api_viagens.model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 public class Travel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String orderNumber;
-    private BigDecimal amount;
-
     @ManyToOne
     private Location source;
 
     @ManyToOne
     private Location destination;
-
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
 
     @Enumerated(EnumType.STRING)
     private TravelType type;
@@ -31,5 +23,13 @@ public class Travel {
         ONE_WAY, RETURN, MULTI
     }
 
-    // Getters e setters...
+    public Object getStartDateTime() {
+        throw new UnsupportedOperationException("Unimplemented method 'getStartDateTime'");
+    }
+
+    public void setId(Long id2) {
+        throw new UnsupportedOperationException("Unimplemented method 'setId'");
+    }
+
+   
 }
