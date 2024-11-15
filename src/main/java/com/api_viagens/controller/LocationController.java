@@ -31,12 +31,12 @@ public class LocationController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Location location) {
-        return locationService.update(id, location)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+    // @PutMapping("/{id}")
+    // public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Location location) {
+    //     return locationService.update(id, location)
+    //             .map(ResponseEntity::ok)
+    //             .orElse(ResponseEntity.notFound().build());
+    // }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
