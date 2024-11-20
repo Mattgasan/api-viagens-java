@@ -2,6 +2,7 @@ package com.api_viagens.controller;
 
 import com.api_viagens.model.Location;
 import com.api_viagens.service.LocationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/locations")
 public class LocationController {
+
     @Autowired
     private LocationService locationService;
 
@@ -25,14 +27,10 @@ public class LocationController {
     @PostMapping
     public ResponseEntity<?> createLocation(@Valid @RequestBody Location location, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            // Se houver erros de validação, retornamos uma resposta com os erros
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
-        // Chama o serviço para salvar a Location
         Location savedLocation = locationService.save(location);
-
-        // Retorna a Location criada com status 201
         return ResponseEntity.status(HttpStatus.CREATED).body(savedLocation);
     }
 
@@ -47,5 +45,12 @@ public class LocationController {
     public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
         locationService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Location> getLocationByName(@PathVariable String name) {
+        return locationService.findByName(name)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

@@ -11,5 +11,4 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
     List<Travel> findByCustomer(Customer customer);
 
     boolean existsByCustomerIdAndStatus(Long customerId, TravelStatus status);
-
 }

@@ -2,12 +2,9 @@ package com.api_viagens.service;
 
 import com.api_viagens.model.Location;
 import com.api_viagens.repository.LocationRepository;
-
-import jakarta.persistence.EntityNotFoundException;
-
 import org.springframework.stereotype.Service;
 
-import java.lang.module.ResolutionException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +25,6 @@ public class LocationService {
 
     // Método para salvar um novo local
     public Location save(Location location) {
-        // Validações básicas
         validateLocation(location);
         return locationRepository.save(location);
     }
@@ -40,17 +36,13 @@ public class LocationService {
 
     // Método para atualizar um local
     public Location update(Long id, Location location) {
-        // Verifica se o local existe antes de tentar atualizar
         Location existingLocation = locationRepository.findById(id)
-                .orElseThrow(() -> new ResolutionException("Local com ID " + id + " não encontrado."));
-        
-        // Atualiza os campos do local
+                .orElseThrow(() -> new EntityNotFoundException("Local com ID " + id + " não encontrado."));
+
         existingLocation.setName(location.getName());
         existingLocation.setCity(location.getCity());
         existingLocation.setState(location.getState());
         existingLocation.setCountry(location.getCountry());
-
-        // Validações
         validateLocation(existingLocation);
 
         return locationRepository.save(existingLocation);
@@ -58,14 +50,12 @@ public class LocationService {
 
     // Método para excluir um local
     public void delete(Long id) {
-        // Verifica se o local existe antes de excluir
-        Location existingLocation = locationRepository.findById(id)
+        Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Local com ID " + id + " não encontrado."));
-        
-        locationRepository.delete(existingLocation);
+        locationRepository.delete(location);
     }
 
-    // Validações adicionais para garantir que os campos essenciais estão preenchidos
+    // Validações adicionais
     private void validateLocation(Location location) {
         if (location.getName() == null || location.getName().isEmpty()) {
             throw new IllegalArgumentException("O nome do local é obrigatório.");

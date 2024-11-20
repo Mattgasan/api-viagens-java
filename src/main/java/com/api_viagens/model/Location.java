@@ -1,6 +1,7 @@
 package com.api_viagens.model;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,21 +16,27 @@ public class Location {
     private Long id;
 
     @NotBlank(message = "O nome é obrigatório!")
+    @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres!")
     private String name;
 
     @NotBlank(message = "O apelido é obrigatório!")
+    @Size(min = 3, max = 100, message = "O apelido deve ter entre 3 e 100 caracteres!")
     private String nickname;
 
     @NotBlank(message = "O endereço é obrigatório!")
+    @Size(min = 10, max = 120, message = "O endereço deve ter entre 10 e 120 caracteres!")
     private String address;
 
     @NotBlank(message = "A cidade é obrigatória!")
+    @Size(min = 5, max = 30, message = "O nome da cidade deve ter entre 5 e 30 caracteres!")
     private String city;
 
     @NotBlank(message = "O estado é obrigatório!")
+    @Size(min = 5, max = 30, message = "O nome do estado deve ter entre 5 e 30 caracteres!")
     private String state;
 
     @NotBlank(message = "O país é obrigatório!")
+    @Size(min = 3, max = 30, message = "O nome do país deve ter entre 3 e 30 caracteres!")
     private String country;
 
     public Location() {

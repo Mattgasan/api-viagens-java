@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/travels")
@@ -26,11 +28,22 @@ public class TravelController {
 
     @PostMapping
     public ResponseEntity<Travel> createTravel(@RequestBody Travel travel) {
-        // Chama a validação antes de salvar a viagem
         travelService.validateCustomerLimit(travel.getCustomer().getId(), travel.getAmount());
         travelService.validateActiveTravel(travel.getCustomer().getId());
         Travel savedTravel = travelService.save(travel);
-        return ResponseEntity.ok(savedTravel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTravel);
+    }
+
+    @PatchMapping("/{id}/dates")
+    public ResponseEntity<Travel> updateTravelDates(@PathVariable Long id, @RequestBody Map<String, String> updates) {
+        try {
+            LocalDateTime newStartDate = LocalDateTime.parse(updates.get("startDateTime"));
+            LocalDateTime newEndDate = LocalDateTime.parse(updates.get("endDateTime"));
+            Travel updatedTravel = travelService.updateDates(id, newStartDate, newEndDate);
+            return ResponseEntity.ok(updatedTravel);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        }
     }
 
     @GetMapping("/{id}")
@@ -42,7 +55,6 @@ public class TravelController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Travel> updateTravel(@PathVariable Long id, @RequestBody Travel travel) {
-        // Chama a validação antes de atualizar a viagem
         travelService.validateCustomerLimit(travel.getCustomer().getId(), travel.getAmount());
         travelService.validateActiveTravel(travel.getCustomer().getId());
         return travelService.update(id, travel)

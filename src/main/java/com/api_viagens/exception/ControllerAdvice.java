@@ -13,14 +13,14 @@ public class ControllerAdvice {
 
     private static final Logger logger = LoggerFactory.getLogger(ControllerAdvice.class);
 
-    // Exceção para quando um local não for encontrado
+    // Exceção para quando uma entidade não for encontrada
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
         logger.error("Entidade não encontrada: {}", ex.getMessage());
         return new ResponseEntity<>("Entidade não encontrada: " + ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    // Exceção para quando uma validação falhar (exemplo: campos obrigatórios)
+    // Exceção para validações que falham
     @ExceptionHandler(javax.validation.ConstraintViolationException.class)
     public ResponseEntity<String> handleValidationException(javax.validation.ConstraintViolationException ex) {
         StringBuilder errorMessage = new StringBuilder("Erro de validação: ");
@@ -34,21 +34,21 @@ public class ControllerAdvice {
         return new ResponseEntity<>(errorMessage.toString(), HttpStatus.BAD_REQUEST);
     }
 
-    // Exceção para quando o cliente tenta fazer uma viagem sem limite suficiente
+    // Exceção para argumentos inválidos
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
         logger.warn("Argumento inválido: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    // Exceção para quando há conflito de viagem (ex: viagem em andamento)
+    // Exceção personalizada para conflitos em viagens
     @ExceptionHandler(TravelConflictException.class)
     public ResponseEntity<String> handleTravelConflictException(TravelConflictException ex) {
         logger.warn("Conflito de viagem: {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    // Exceção para outras exceções genéricas
+    // Exceção genérica
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
         logger.error("Erro inesperado: {}", ex.getMessage(), ex);

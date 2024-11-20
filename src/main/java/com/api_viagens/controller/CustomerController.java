@@ -1,44 +1,65 @@
 package com.api_viagens.controller;
 
+import com.api_viagens.model.Customer;
 import com.api_viagens.model.Location;
 import com.api_viagens.service.CustomerService;
+import com.api_viagens.service.LocationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.management.relation.RelationNotFoundException;
 
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
+
+    private final CustomerService customerService;
+    private final LocationService locationService;
+
     @Autowired
-    private CustomerService customerService;
+    public CustomerController(CustomerService customerService, LocationService locationService) {
+        this.customerService = customerService;
+        this.locationService = locationService;
+    }
 
     @GetMapping
-    public List<Location> getAllCustomers() {
+    public List<Customer> getAllCustomers() {
         return customerService.findAll();
     }
 
     @PostMapping
-    public Location createCustomer(@RequestBody Location customer) {
+    public Customer createCustomer(@RequestBody Customer customer) {
         return customerService.save(customer);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Location> getCustomerById(@PathVariable Long id) {
-        return customerService.findById(id)
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Customer> getLocationByName(@PathVariable String name) {
+        return locationService.findByName(name)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // @PutMapping("/{id}")
-    // public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
-    //     return customerService.update(id, customer)
-    //             .map(ResponseEntity::ok)
-    //             .orElse(ResponseEntity.notFound().build());
-    // }
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Customer> updateCustomerStatus(@PathVariable Long id,
+            @RequestBody Map<String, String> updates) {
+        String newStatus = updates.get("status");
+        return customerService.updateStatus(id, newStatus)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+        return customerService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) throws RelationNotFoundException {
