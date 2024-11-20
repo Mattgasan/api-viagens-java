@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 public class Customer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +28,7 @@ public class Customer {
     private String city;
 
     @NotNull(message = "O estado é obrigatório!")
-    private String state;
+    private BigDecimal state;
 
     @NotBlank(message = "O país é obrigatório!")
     private String country;
@@ -39,6 +40,7 @@ public class Customer {
     private BigDecimal limitAmount;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "O status é obrigatório!")
     private Status status;
 
     public enum Status {
@@ -124,5 +126,15 @@ public class Customer {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Optional<Customer> map(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'map'");
+    }
+
+    public Optional<Customer> map(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'map'");
     }
 }

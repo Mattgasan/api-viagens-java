@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -39,11 +40,10 @@ public class TravelController {
         try {
             LocalDateTime newStartDate = LocalDateTime.parse(updates.get("startDateTime"));
             LocalDateTime newEndDate = LocalDateTime.parse(updates.get("endDateTime"));
-            Travel updatedTravel = travelService.updateDates(id, newStartDate, newEndDate);
-            return ResponseEntity.ok(updatedTravel);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().body("Invalid date format");
         }
+
     }
 
     @GetMapping("/{id}")
@@ -67,4 +67,5 @@ public class TravelController {
         travelService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
 }

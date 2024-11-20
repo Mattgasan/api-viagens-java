@@ -16,11 +16,11 @@ public class Travel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O número do pedido é obrigatório!!")
+    @NotBlank(message = "O número do pedido é obrigatório!")
     private String orderNumber;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    @DecimalMin(value = "0.0", inclusive = false, message = "O valor deve ser maior que zero!!")
+    @DecimalMin(value = "0.0", inclusive = false, message = "O valor deve ser maior que zero!")
     private BigDecimal amount;
 
     @ManyToOne
@@ -31,46 +31,43 @@ public class Travel {
     @JoinColumn(name = "destination_id", nullable = false)
     private Location destination;
 
-    @NotNull(message = "A data de início é obrigatória!!")
+    @NotNull(message = "A data de início é obrigatória!")
     private LocalDateTime startDateTime;
 
-    @NotNull(message = "A data de término é obrigatória!!")
+    @NotNull(message = "A data de término é obrigatória!")
     private LocalDateTime endDateTime;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "O tipo de viagem é obrigatório!!")
+    @NotNull(message = "O tipo de viagem é obrigatório!")
     private TravelType type;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "O status da viagem é obrigatório!!")
+    @NotNull(message = "O status da viagem é obrigatório!")
     private TravelStatus status;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    @NotNull(message = "O cliente é obrigatório!!")
+    @NotNull(message = "O cliente é obrigatório!")
     private Customer customer;
-
-    public Travel() {
-    }
-
-    public Travel(String orderNumber, BigDecimal amount, Location source, Location destination,
-            LocalDateTime startDateTime, LocalDateTime endDateTime, TravelType type, Customer customer) {
-        this.orderNumber = orderNumber;
-        this.amount = amount;
-        this.source = source;
-        this.destination = destination;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.type = type;
-        this.customer = customer;
-    }
 
     public enum TravelType {
         ONE_WAY, RETURN, MULTI
     }
 
     public enum TravelStatus {
-        ON_GOING, COMPLETED, CANCELLED;
+        ON_GOING("Em andamento"),
+        COMPLETED("Concluído"),
+        CANCELLED("Cancelado");
+
+        private final String description;
+
+        TravelStatus(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
     @AssertTrue(message = "A data de início deve ser anterior à data de término!")

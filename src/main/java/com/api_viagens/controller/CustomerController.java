@@ -20,13 +20,6 @@ import javax.management.relation.RelationNotFoundException;
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final LocationService locationService;
-
-    @Autowired
-    public CustomerController(CustomerService customerService, LocationService locationService) {
-        this.customerService = customerService;
-        this.locationService = locationService;
-    }
 
     @GetMapping
     public List<Customer> getAllCustomers() {
@@ -36,13 +29,6 @@ public class CustomerController {
     @PostMapping
     public Customer createCustomer(@RequestBody Customer customer) {
         return customerService.save(customer);
-    }
-
-    @GetMapping("/name/{name}")
-    public ResponseEntity<Customer> getLocationByName(@PathVariable String name) {
-        return locationService.findByName(name)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/{id}/status")
