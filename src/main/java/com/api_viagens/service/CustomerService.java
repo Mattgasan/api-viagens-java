@@ -42,7 +42,7 @@ public class CustomerService {
         // Verifica se o local existe antes de tentar atualizar
         Location existingLocation = locationRepository.findById(id)
                 .orElseThrow(() -> new RelationNotFoundException("Local com ID " + id + " não encontrado."));
-        
+
         // Atualiza os campos do local
         existingLocation.setName(customer.getName());
         existingLocation.setCity(customer.getCity());
@@ -60,22 +60,23 @@ public class CustomerService {
         // Verifica se o local existe antes de excluir
         Location existingLocation = locationRepository.findById(id)
                 .orElseThrow(() -> new RelationNotFoundException("Local com ID " + id + " não encontrado."));
-        
+
         locationRepository.delete(existingLocation);
     }
 
-    // Validações adicionais para garantir que os campos essenciais estão preenchidos
+    // Validações adicionais para garantir que os campos essenciais estão
+    // preenchidos
     private void validateLocation(Location existingLocation) {
-                        if (existingLocation.getName() == null || existingLocation.getName().isEmpty()) {
-                            throw new IllegalArgumentException("O nome do local é obrigatório.");
-                        }
-                        if (existingLocation.getCity() == null || existingLocation.getCity().isEmpty()) {
-                            throw new IllegalArgumentException("A cidade do local é obrigatória.");
-                        }
-                        if (existingLocation.getState() == null || existingLocation.getState().isEmpty()) {
-                            throw new IllegalArgumentException("O estado do local é obrigatório.");
-                        }
-                        if (existingLocation.getCountry() == null || existingLocation.getCountry().isEmpty()) {
+        if (existingLocation.getName() == null || existingLocation.getName().isEmpty()) {
+            throw new IllegalArgumentException("O nome do local é obrigatório.");
+        }
+        if (existingLocation.getCity() == null || existingLocation.getCity().isEmpty()) {
+            throw new IllegalArgumentException("A cidade do local é obrigatória.");
+        }
+        if (existingLocation.getState() == null || existingLocation.getState().isEmpty()) {
+            throw new IllegalArgumentException("O estado do local é obrigatório.");
+        }
+        if (existingLocation.getCountry() == null || existingLocation.getCountry().isEmpty()) {
             throw new IllegalArgumentException("O país do local é obrigatório.");
         }
     }

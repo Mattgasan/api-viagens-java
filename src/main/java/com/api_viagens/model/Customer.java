@@ -49,6 +49,7 @@ public class Customer {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -56,6 +57,7 @@ public class Customer {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -63,6 +65,7 @@ public class Customer {
     public String getLastname() {
         return lastname;
     }
+
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
@@ -70,6 +73,7 @@ public class Customer {
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -77,6 +81,7 @@ public class Customer {
     public String getCity() {
         return city;
     }
+
     public void setCity(String city) {
         this.city = city;
     }
@@ -84,6 +89,7 @@ public class Customer {
     public String getState() {
         return state;
     }
+
     public void setState(String state) {
         this.state = state;
     }
@@ -91,6 +97,7 @@ public class Customer {
     public String getCountry() {
         return country;
     }
+
     public void setCountry(String country) {
         this.country = country;
     }
@@ -98,6 +105,7 @@ public class Customer {
     public LocalDate getBirthDate() {
         return birthDate;
     }
+
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
@@ -105,6 +113,7 @@ public class Customer {
     public BigDecimal getLimitAmount() {
         return limitAmount;
     }
+
     public void setLimitAmount(BigDecimal limitAmount) {
         this.limitAmount = limitAmount;
     }
@@ -112,6 +121,7 @@ public class Customer {
     public Status getStatus() {
         return status;
     }
+
     public void setStatus(Status status) {
         this.status = status;
     }

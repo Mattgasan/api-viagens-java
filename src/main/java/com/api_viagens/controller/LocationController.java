@@ -3,9 +3,12 @@ package com.api_viagens.controller;
 import com.api_viagens.model.Location;
 import com.api_viagens.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,8 +23,17 @@ public class LocationController {
     }
 
     @PostMapping
-    public Location createLocation(@RequestBody Location location) {
-        return locationService.save(location);
+    public ResponseEntity<?> createLocation(@Valid @RequestBody Location location, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // Se houver erros de validação, retornamos uma resposta com os erros
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
+        // Chama o serviço para salvar a Location
+        Location savedLocation = locationService.save(location);
+
+        // Retorna a Location criada com status 201
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedLocation);
     }
 
     @GetMapping("/{id}")
@@ -30,13 +42,6 @@ public class LocationController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-    // @PutMapping("/{id}")
-    // public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Location location) {
-    //     return locationService.update(id, location)
-    //             .map(ResponseEntity::ok)
-    //             .orElse(ResponseEntity.notFound().build());
-    // }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {

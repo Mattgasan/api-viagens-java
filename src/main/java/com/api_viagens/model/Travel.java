@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,6 +19,7 @@ public class Travel {
     @NotBlank(message = "O número do pedido é obrigatório!!")
     private String orderNumber;
 
+    @Column(nullable = false, precision = 10, scale = 2)
     @DecimalMin(value = "0.0", inclusive = false, message = "O valor deve ser maior que zero!!")
     private BigDecimal amount;
 
@@ -39,13 +41,41 @@ public class Travel {
     @NotNull(message = "O tipo de viagem é obrigatório!!")
     private TravelType type;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "O status da viagem é obrigatório!!")
+    private TravelStatus status;
+
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     @NotNull(message = "O cliente é obrigatório!!")
     private Customer customer;
 
+    public Travel() {
+    }
+
+    public Travel(String orderNumber, BigDecimal amount, Location source, Location destination,
+            LocalDateTime startDateTime, LocalDateTime endDateTime, TravelType type, Customer customer) {
+        this.orderNumber = orderNumber;
+        this.amount = amount;
+        this.source = source;
+        this.destination = destination;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.type = type;
+        this.customer = customer;
+    }
+
     public enum TravelType {
         ONE_WAY, RETURN, MULTI
+    }
+
+    public enum TravelStatus {
+        ON_GOING, COMPLETED, CANCELLED;
+    }
+
+    @AssertTrue(message = "A data de início deve ser anterior à data de término!")
+    public boolean isStartDateBeforeEndDate() {
+        return startDateTime != null && endDateTime != null && startDateTime.isBefore(endDateTime);
     }
 
     // -------------- GETTERS E SETTERS --------------
@@ -53,6 +83,7 @@ public class Travel {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -60,6 +91,7 @@ public class Travel {
     public String getOrderNumber() {
         return orderNumber;
     }
+
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
     }
@@ -67,6 +99,7 @@ public class Travel {
     public BigDecimal getAmount() {
         return amount;
     }
+
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
@@ -74,6 +107,7 @@ public class Travel {
     public Location getSource() {
         return source;
     }
+
     public void setSource(Location source) {
         this.source = source;
     }
@@ -81,6 +115,7 @@ public class Travel {
     public Location getDestination() {
         return destination;
     }
+
     public void setDestination(Location destination) {
         this.destination = destination;
     }
@@ -88,6 +123,7 @@ public class Travel {
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
+
     public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
     }
@@ -95,6 +131,7 @@ public class Travel {
     public LocalDateTime getEndDateTime() {
         return endDateTime;
     }
+
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
     }
@@ -102,6 +139,7 @@ public class Travel {
     public TravelType getType() {
         return type;
     }
+
     public void setType(TravelType type) {
         this.type = type;
     }
@@ -109,9 +147,9 @@ public class Travel {
     public Customer getCustomer() {
         return customer;
     }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-   
 }

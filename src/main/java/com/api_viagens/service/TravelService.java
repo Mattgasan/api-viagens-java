@@ -57,8 +57,8 @@ public class TravelService {
     // Valida o limite de crédito do cliente
     public void validateCustomerLimit(Long customerId, BigDecimal travelAmount) {
         Customer customer = customerRepository.findById(customerId)
-            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
-        
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+
         if (customer.getLimitAmount().compareTo(travelAmount) < 0) {
             throw new IllegalArgumentException("Cliente não possui limite suficiente para a viagem.");
         }
@@ -67,7 +67,7 @@ public class TravelService {
     // Verifica se o cliente já possui uma viagem em andamento
     public void validateActiveTravel(Long customerId) {
         boolean hasActiveTravel = travelRepository.existsByCustomerIdAndStatus(customerId, "ON_GOING");
-        
+
         if (hasActiveTravel) {
             throw new IllegalArgumentException("O cliente já possui uma viagem em andamento.");
         }
